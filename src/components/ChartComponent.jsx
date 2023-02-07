@@ -44,7 +44,7 @@ const ChartComponent = ({ tweetsData }) => {
       callbacks: {
         label: function (tooltipItem, data) {
           const dataset = data.datasets[tooltipItem.datasetIndex];
-          const label = dataset.label;
+          const label = tooltipItem.comment;
           return label + ': ' + tooltipItem.xLabel + '% negativo, ' + tooltipItem.yLabel + '% positivo';
         },
       }
@@ -57,10 +57,12 @@ const ChartComponent = ({ tweetsData }) => {
       // setDataTweet(tweetsData.data);
       // console.log(dataTweet);
       data.forEach(item => {
+        let comment = item.input;
         let dataItem = {
           x: (item.labels.negative.confidence) * 100,
           y: (item.labels.positive.confidence) * 100,
           r: item.confidence * 10,
+          comment: comment
         }
         let position = 0;
         item.prediction == 'positive' ? (position = 0) : item.prediction == 'negative' ? (position = 1) : (position = 2);
