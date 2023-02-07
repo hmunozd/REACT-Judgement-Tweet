@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `${process.env.BACK_URL}/cohere`;
+const BASE_URL = `back.judgment-tweet.jildo.site/cohere`;
 
 const tweetApi = axios.create({
   baseURL: BASE_URL
