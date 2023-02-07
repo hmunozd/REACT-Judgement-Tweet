@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const BASE_URL = `back.judgment-tweet.jildo.site/cohere`;
+const BACK_URL = `back.judgment-tweet.jildo.site/cohere`;
 
 const tweetApi = axios.create({
-  baseURL: BASE_URL
+  baseURL: BACK_URL
 });
 
 export const getCommentsStatistics = async ({ idTweet, maxResults = 50 }) => {
