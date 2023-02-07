@@ -1,4 +1,4 @@
-# Tweet Analysis Project
+# JUDGMENT TWEET
 
 Este proyecto está construido con React, Tailwind y está alimentado por Cohere. Su objetivo es analizar los comentarios de un tweet.
 
