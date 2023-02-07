@@ -5,6 +5,29 @@ import { Bar, Bubble, Line, Pie } from 'react-chartjs-2';
 ChartJS.register(ArcElement, LinearScale, PointElement, Tooltip, Legend);
 
 const ChartComponent = ({ tweetsData }) => {
+  let ubleData = {
+    datasets: [
+      {
+        label: 'Positive',
+        data: [],
+        borderColor: 'green',
+        backgroundColor: 'rgba(237, 213, 173, 0.5)',
+      },
+      {
+        label: 'Negative',
+        data: [],
+        borderColor: 'red',
+        backgroundColor: 'rgba(237, 213, 173, 0.5)',
+      },
+      {
+        label: 'Neutral',
+        data: [],
+        borderColor: 'blue',
+        backgroundColor: 'rgba(237, 213, 173, 0.5)',
+      },
+    ],
+  }
+  const [bubbleData, setBubbleData] = useState(ubleData);
   const [dataTweet, setDataTweet] = useState([]);
 
   const barData = {
@@ -50,7 +73,7 @@ const ChartComponent = ({ tweetsData }) => {
   };
 
   const pieData = {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: ['Positive', 'Negative', 'Neutral', 'Green', 'Purple', 'Orange'],
     datasets: [
       {
         label: '# of Votes',
@@ -76,48 +99,50 @@ const ChartComponent = ({ tweetsData }) => {
     ]
   };
 
-  const bubleData = {
-    datasets: [
-      {
-        label: 'Positive',
-        data: [],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-      {
-        label: 'Negative',
-        data: [],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-      {
-        label: 'Neutral',
-        data: [],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      },
-    ],
-  }
-
   const options = {
-    scales: {
-      y: {
-        beginAtZero: true,
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
       },
+      title: {
+        display: true,
+        text: 'Comentarios'
+      }
     },
+    tooltip: {
+      callbacks: {
+        label: function (context) {
+          let label = context.dataset.label || '';
+
+          if (label) {
+            label += ': ';
+          }
+          if (context.parsed.y !== null) {
+            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+          }
+          return label;
+        }
+      }
+    }
   };
 
   useEffect(() => {
-    console.log(tweetsData);
     if (tweetsData.data && tweetsData.data.length) {
-      setDataTweet(tweetsData.data);
-      dataTweet.forEach(item => {
+      let data = tweetsData.data;
+      // setDataTweet(tweetsData.data);
+      // console.log(dataTweet);
+      data.forEach(item => {
         let dataItem = {
-          x: (item.labels.positive.confidence) * 100,
-          y: (item.labels.negative.confidence) * 100,
-          r: item.confidence,
+          x: (item.labels.negative.confidence) * 100,
+          y: (item.labels.positive.confidence) * 100,
+          r: item.confidence * 10,
         }
         let position = 0;
         item.prediction == 'positive' ? (position = 0) : item.prediction == 'negative' ? (position = 1) : (position = 2);
-        datasets[position].push(dataItem);
+        ubleData.datasets[position].data.push(dataItem);
       });
+      setBubbleData(ubleData);
     }
   }, [tweetsData]);
 
@@ -125,10 +150,8 @@ const ChartComponent = ({ tweetsData }) => {
   return (
     <div className='grid grid-cols-2'>
       <div className="col-span-2">
-        <Bubble options={options} data={bubleData} />
-      </div>
-      <div className="col-span-1">
-        <Pie data={pieData} />
+        <Bubble options={options} data={bubbleData} />
+        <p className="text-center"><small>En una muestra de 90 comentarios del tweet</small></p>
       </div>
     </div>
   );

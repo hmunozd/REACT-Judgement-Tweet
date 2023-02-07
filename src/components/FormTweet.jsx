@@ -19,7 +19,7 @@ const FormTweet = ({ onFormSubmit }) => {
 
         }
         const idTweet = formData.idTweet;
-        const maxResults = 10;
+        const maxResults = 90;
         getCommentsStatistics({ idTweet, maxResults })
             .then(data => {
                 onFormSubmit(data);
