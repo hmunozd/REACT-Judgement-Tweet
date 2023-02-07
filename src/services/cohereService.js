@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACK_URL = `www.back.judgment-tweet.jildo.site/cohere`;
+const BACK_URL = `https://back.judgment-tweet.jildo.site/api/cohere`;
 
 const tweetApi = axios.create({
   baseURL: BACK_URL
