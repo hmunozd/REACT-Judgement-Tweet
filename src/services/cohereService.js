@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACK_URL = `back.judgment-tweet.jildo.site/cohere`;
+const BACK_URL = `www.back.judgment-tweet.jildo.site/cohere`;
 
 const tweetApi = axios.create({
   baseURL: BACK_URL
@@ -8,7 +8,7 @@ const tweetApi = axios.create({
 
 export const getCommentsStatistics = async ({ idTweet, maxResults = 50 }) => {
   try {
-    const response = await fetch(`${BACK_URL}/classifyData/${idTweet}/${maxResults}`);
+    const response = await axios.get(`${BACK_URL}/classifyData/${idTweet}/${maxResults}`);
     return response.data;
   } catch (error) {
     console.error(error);
