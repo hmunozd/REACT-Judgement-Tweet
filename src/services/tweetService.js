@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:3658/api/";
+const BASE_URL = `${process.env.BASE_URL}/twitter`;
 
 export const tweetApi = axios.create({
   baseURL: BASE_URL,

@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, LinearScale, PointElement, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Bar, Bubble, Line, Pie } from 'react-chartjs-2';
 
 ChartJS.register(ArcElement, LinearScale, PointElement, Tooltip, Legend);
 
-const ChartComponent = () => {
+const ChartComponent = ({ tweetsData }) => {
+  const [dataTweet, setDataTweet] = useState([]);
+
   const barData = {
     labels: ['January', 'February', 'March', 'April', 'May'],
     datasets: [
@@ -77,21 +79,18 @@ const ChartComponent = () => {
   const bubleData = {
     datasets: [
       {
-        label: 'Red dataset',
-        data: Array.from({ length: 50 }, () => ({
-          x: 35,
-          y: 35,
-          r: 3,
-        })),
+        label: 'Positive',
+        data: [],
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
       {
-        label: 'Blue dataset',
-        data: Array.from({ length: 50 }, () => ({
-          x: 12,
-          y: 85,
-          r: 3,
-        })),
+        label: 'Negative',
+        data: [],
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+      {
+        label: 'Neutral',
+        data: [],
         backgroundColor: 'rgba(53, 162, 235, 0.5)',
       },
     ],
@@ -105,13 +104,30 @@ const ChartComponent = () => {
     },
   };
 
+  useEffect(() => {
+    console.log(tweetsData);
+    if (tweetsData.data && tweetsData.data.length) {
+      setDataTweet(tweetsData.data);
+      dataTweet.forEach(item => {
+        let dataItem = {
+          x: (item.labels.positive.confidence) * 100,
+          y: (item.labels.negative.confidence) * 100,
+          r: item.confidence,
+        }
+        let position = 0;
+        item.prediction == 'positive' ? (position = 0) : item.prediction == 'negative' ? (position = 1) : (position = 2);
+        datasets[position].push(dataItem);
+      });
+    }
+  }, [tweetsData]);
+
 
   return (
     <div className='grid grid-cols-2'>
-      <div class="col-span-1">
+      <div className="col-span-2">
         <Bubble options={options} data={bubleData} />
       </div>
-      <div class="col-span-1">
+      <div className="col-span-1">
         <Pie data={pieData} />
       </div>
     </div>

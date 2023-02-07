@@ -1,16 +1,17 @@
 import axios from 'axios';
 
-const BASE_URL = "http://localhost:3658/api/cohere/";
+const BASE_URL = `${process.env.BASE_URL}/cohere`;
 
-export const tweetApi = axios.create({
-  baseURL: BASE_URL,
+const tweetApi = axios.create({
+  baseURL: BASE_URL
 });
 
-tweetApi.defaults.headers.common["Content-Type"] = "application/json";
-// tweetApi.defaults.headers.common["Accept"] = "json";
-
 export const getCommentsStatistics = async ({ idTweet, maxResults = 50 }) => {
-  const response = await tweetApi.get(`clasifyData/${idTweet}/${maxResults}`,);
-  return response.data;
+  try {
+    const response = await tweetApi.get(`/classifyData/${idTweet}/${maxResults}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
-
